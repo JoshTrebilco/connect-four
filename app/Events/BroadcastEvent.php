@@ -7,6 +7,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class BroadcastEvent implements ShouldBroadcastNow
 {
@@ -32,7 +33,7 @@ class BroadcastEvent implements ShouldBroadcastNow
     {
         return [
             new Channel('debug-channel'),
-            new Channel('game.'.$this->gameState->id),
+            new Channel(Str::after(config('app.url'), 'https://').'.'.'game.'.$this->gameState->id),
         ];
     }
 
@@ -43,6 +44,7 @@ class BroadcastEvent implements ShouldBroadcastNow
             'gameState' => $this->gameState,
             'playerState' => $this->playerState,
             'boardState' => $this->boardState,
+            'gameChannel' => Str::after(config('app.url'), 'https://').'.'.'game.'.$this->gameState->id,
         ];
 
         // Convert large integers to strings to prevent JavaScript precision loss

@@ -1,5 +1,5 @@
 @php
-    $channel = 'game.' . $game->id;
+    $channel = Str::after(config('app.url'), 'https://').'.'.'game.'.$game->id;
 @endphp
 
 <x-layout>
