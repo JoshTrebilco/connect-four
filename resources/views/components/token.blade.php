@@ -9,10 +9,10 @@
             r="{{ $size * 0.45 }}"
             @class([
                 'transition-opacity',
-                'fill-blue-500/20' => $color === 'blue',
-                'fill-green-500/20' => $color === 'green',
-                'fill-red-500/20' => $color === 'red',
-                'fill-yellow-500/20' => $color === 'yellow',
+                'fill-cyan-400/30' => $color === 'blue',
+                'fill-emerald-400/30' => $color === 'green',
+                'fill-orange-400/30' => $color === 'red',
+                'fill-yellow-400/30' => $color === 'yellow',
             ])
         />
         <!-- Token background -->
@@ -22,10 +22,10 @@
             r="{{ $size * 0.42 }}"
             @class([
                 'transition-opacity',
-                'fill-blue-500/50 stroke-blue-400' => $color === 'blue',
-                'fill-green-500/50 stroke-green-400' => $color === 'green',
-                'fill-red-500/50 stroke-red-400' => $color === 'red',
-                'fill-yellow-500/50 stroke-yellow-400' => $color === 'yellow',
+                'fill-cyan-500 stroke-cyan-400' => $color === 'blue',
+                'fill-emerald-500 stroke-emerald-400' => $color === 'green',
+                'fill-orange-500 stroke-orange-400' => $color === 'red',
+                'fill-yellow-400 stroke-yellow-300' => $color === 'yellow',
             ])
         />
         <!-- Token border -->
@@ -35,10 +35,10 @@
             r="{{ $size * 0.42 }}"
             @class([
                 'fill-none stroke-[3]',
-                'stroke-blue-300' => $color === 'blue',
-                'stroke-green-300' => $color === 'green',
-                'stroke-red-300' => $color === 'red',
-                'stroke-yellow-300' => $color === 'yellow',
+                'stroke-cyan-300' => $color === 'blue',
+                'stroke-emerald-300' => $color === 'green',
+                'stroke-orange-300' => $color === 'red',
+                'stroke-yellow-200' => $color === 'yellow',
             ])
         />
     </g>
