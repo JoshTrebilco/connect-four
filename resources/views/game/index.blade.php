@@ -11,10 +11,10 @@
         </div>
 
         <!-- Game Options Cards -->
-        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="grid sm:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
             <!-- Join Game Card -->
             <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl transform transition duration-500 hover:scale-105 border border-cyan-200">
-                <div class="p-8">
+                <div class="p-6 sm:p-8">
                     <div class="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-400 to-teal-500 rounded-full mb-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -29,7 +29,7 @@
                             id="gameId"
                             name="game_id"
                             class="w-full px-4 py-3 rounded-lg border-2 border-cyan-300 bg-white/70 text-slate-700 placeholder-slate-400 focus:border-cyan-500 focus:ring-0 focus:outline-none"
-                            placeholder="Enter game code..."
+                            placeholder="Enter game code or URL..."
                             required
                         />
                         <button
@@ -45,11 +45,29 @@
                         document.getElementById('joinGameForm').addEventListener('submit', function(e) {
                             e.preventDefault();
                             
-                            const gameId = document.getElementById('gameId').value.trim();
+                            const gameIdInput = document.getElementById('gameId').value.trim();
                             const button = document.getElementById('joinButton');
                             
-                            if (gameId === '') {
-                                alert('Please enter a game code');
+                            if (gameIdInput === '') {
+                                alert('Please enter a game code or URL');
+                                return;
+                            }
+                            
+                            // Extract game ID from URL or use as-is if it's just numbers
+                            let gameId = gameIdInput;
+                            
+                            // Check if it's a full URL
+                            if (gameIdInput.includes('/games/')) {
+                                const match = gameIdInput.match(/\/games\/(\d+)/);
+                                if (match) {
+                                    gameId = match[1];
+                                } else {
+                                    alert('Invalid game URL format. Please check the URL and try again.');
+                                    return;
+                                }
+                            } else if (!/^\d+$/.test(gameIdInput)) {
+                                // Check if it's just numbers, if not show error
+                                alert('Please enter a valid game code (numbers only) or a complete game URL');
                                 return;
                             }
                             
@@ -74,7 +92,7 @@
 
             <!-- Create Game Card -->
             <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl transform transition duration-500 hover:scale-105 border border-teal-200">
-                <div class="p-8 h-full flex flex-col">
+                <div class="p-6 sm:p-8 h-full flex flex-col">
                     <div class="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-full mb-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

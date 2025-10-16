@@ -1,7 +1,7 @@
 @props(['game', 'auth_player_id', 'channel'])
 <div class="space-y-6">
     @if(! $game->hasPlayer($auth_player_id) && ! $game->isInProgress())
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-cyan-200 shadow-xl">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-cyan-200 shadow-xl">
             <div class="flex items-center space-x-3 mb-4">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-teal-500 rounded-full flex items-center justify-center">
@@ -31,7 +31,7 @@
 
     @if ($game->hasPlayer($auth_player_id) && !$game->isInProgress())
         <!-- Share Game Section -->
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-teal-200 shadow-xl">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-teal-200 shadow-xl">
             <div class="flex items-center space-x-3 mb-4">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-full flex items-center justify-center">
@@ -73,7 +73,7 @@
     @endif
 
     @if(! $game->hasPlayer($auth_player_id) && $game->isInProgress())
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-orange-200 shadow-xl lg:max-w-60">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-orange-200 shadow-xl lg:max-w-60">
                 <div>
                     <h3 class="text-lg font-semibold text-slate-700">
                         Game in Progress
@@ -88,9 +88,9 @@
         </div>
     @endif
 
-    <div class="grid gap-6 grid-cols-2 lg:grid-cols-1">
+    <div class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
         <!-- Players List -->
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-cyan-200 shadow-xl">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-cyan-200 shadow-xl">
             <h3 class="text-lg font-semibold text-slate-700 mb-4">Players</h3>
             <ul class="space-y-3">
                 @foreach ($game->players() as $player)
@@ -121,7 +121,7 @@
         </div>
 
         <!-- Turn Text Section -->
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-teal-200 shadow-xl {{ $game->isInProgress() ? '' : 'hidden' }}">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-teal-200 shadow-xl {{ $game->isInProgress() ? '' : 'hidden' }}">
             <div class="flex justify-center">
                 <div class="flex flex-col items-center">
                     <div class="mt-2 text-center text-slate-700 h-6 w-32 flex items-center justify-center" id="turn-text">
