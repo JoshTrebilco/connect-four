@@ -23,8 +23,20 @@
         <div id="winner-modal" class="fixed inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center hidden z-50">
             <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-8 border border-cyan-200 shadow-xl text-center">
                 <div class="flex items-center justify-center space-x-3 mb-6">
-                    <div id="winner-token" class="w-10 h-10 rounded-full flex items-center justify-center">
-                        <!-- Token will be populated by JavaScript -->
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center">
+                        <!-- Pre-rendered winner tokens -->
+                        <div id="winner-token-blue" class="hidden">
+                            <x-token color="blue" :size="40" />
+                        </div>
+                        <div id="winner-token-green" class="hidden">
+                            <x-token color="green" :size="40" />
+                        </div>
+                        <div id="winner-token-red" class="hidden">
+                            <x-token color="red" :size="40" />
+                        </div>
+                        <div id="winner-token-yellow" class="hidden">
+                            <x-token color="yellow" :size="40" />
+                        </div>
                     </div>
                     <h2 id="winner-text" class="text-2xl font-bold text-slate-700">
                         <!-- Winner text will be populated by JavaScript -->
@@ -159,9 +171,16 @@
         }
 
         updateWinnerToken(winner) {
-            const token = document.getElementById('winner-token');
-            token.className = `w-10 h-10 rounded-full bg-${winner.color}-500 flex items-center justify-center`;
-            token.innerHTML = `<span class="text-white font-bold text-lg">${winner.name.charAt(0).toUpperCase()}</span>`;
+            // Hide all winner tokens first
+            document.querySelectorAll('[id^="winner-token-"]').forEach(token => {
+                token.classList.add('hidden');
+            });
+            
+            // Show the correct winner token
+            const winnerToken = document.getElementById(`winner-token-${winner.color}`);
+            if (winnerToken) {
+                winnerToken.classList.remove('hidden');
+            }
         }
 
         updateWinnerText(winner) {
