@@ -3,9 +3,10 @@
 <div class="relative max-w-[600px] mx-auto lg:mx-0 lg:w-[600px] h-[400px] sm:h-[500px] lg:h-[600px] bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-cyan-200 p-3 sm:p-4 lg:p-6 flex-1">
     {{-- Column headers for dropping tokens --}}
     @if($game->active_player_id == $auth_player_id)
-        <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4">
+        <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4" id="column-headers">
             @for($i = 0; $i < 7; $i++)
                 <div class="h-4 sm:h-6 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center text-white font-bold text-xs sm:text-sm" 
+                        data-column="{{ $i }}"
                         onclick="window.board.placeToken({{ $i }})">
                     {{ $i + 1 }}
                 </div>
@@ -14,7 +15,7 @@
     @else
         <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4">
             @for($i = 0; $i < 7; $i++)
-                <div class="h-4 sm:h-6 rounded-full bg-cyan-100"></div>
+                <div class="h-4 sm:h-6 rounded-full bg-cyan-100" data-column="{{ $i }}"></div>
             @endfor
         </div>
     @endif
@@ -35,6 +36,26 @@
             @endfor
         @endfor
     </div>
+
+    {{-- Pre-rendered tokens for animation --}}
+    <div id="token-drop-overlay" class="absolute inset-0 pointer-events-none hidden">
+        {{-- Blue token --}}
+        <div id="token-blue" class="absolute w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18 rounded-full flex items-center justify-center opacity-0 -left-20 -top-20">
+            <x-token color="blue" :size="64" />
+        </div>
+        {{-- Green token --}}
+        <div id="token-green" class="absolute w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18 rounded-full flex items-center justify-center opacity-0 -left-20 -top-20">
+            <x-token color="green" :size="64" />
+        </div>
+        {{-- Red token --}}
+        <div id="token-red" class="absolute w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18 rounded-full flex items-center justify-center opacity-0 -left-20 -top-20">
+            <x-token color="red" :size="64" />
+        </div>
+        {{-- Yellow token --}}
+        <div id="token-yellow" class="absolute w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18 rounded-full flex items-center justify-center opacity-0 -left-20 -top-20">
+            <x-token color="yellow" :size="64" />
+        </div>
+    </div>
 </div>
 
 
@@ -42,43 +63,72 @@
     class Board {
         constructor() {
             this.channel = window.Echo.channel(@json($channel));
+            this.overlay = document.getElementById('token-drop-overlay');
+            this.tokens = {
+                blue: document.getElementById('token-blue'),
+                green: document.getElementById('token-green'),
+                red: document.getElementById('token-red'),
+                yellow: document.getElementById('token-yellow')
+            };
         }
 
-        handleEvent(event, gameState) {
+        handleEvent(event, gameState, playerState) {
             if (event === 'App\\Events\\Gameplay\\PlacedToken') {
-                // Trigger token drop animation
-                this.animateTokenDrop(gameState);
+                this.animateTokenDrop(playerState.last_placed_column, playerState.color);
             }
-        }
+        }   
 
-        animateTokenDrop(gameState) {
-            // Find the last placed token by comparing with previous state
-            // For now, we'll animate all tokens and let CSS handle the timing
-            const tokenCells = document.querySelectorAll('[data-row][data-col]');
+        async animateTokenDrop(column, color) {
+            // Show the overlay
+            this.overlay.classList.remove('hidden');
             
-            tokenCells.forEach(cell => {
-                const row = parseInt(cell.dataset.row);
-                const col = parseInt(cell.dataset.col);
-                
-                // Check if this cell has a token
-                if (cell.querySelector('svg')) {
-                    // Determine animation class based on row (higher row = longer drop)
-                    let animationClass = 'animate-drop-token';
-                    if (row >= 4) {
-                        animationClass = 'animate-drop-token-short';
-                    } else if (row <= 1) {
-                        animationClass = 'animate-drop-token-long';
-                    }
-                    
-                    // Add animation class
-                    cell.classList.add(animationClass);
-                    
-                    // Remove animation class after animation completes
-                    setTimeout(() => {
-                        cell.classList.remove(animationClass);
-                    }, 1000);
-                }
-            });
+            // Get the column header position
+            const columnHeader = document.querySelector(`[data-column="${column}"]`);
+            if (!columnHeader) return;
+            
+            const headerRect = columnHeader.getBoundingClientRect();
+            const boardRect = this.overlay.getBoundingClientRect();
+            
+            // Position the token at the column header, centered
+            const startX = headerRect.left - boardRect.left; // Center horizontally
+            const startY = headerRect.bottom - boardRect.top - 8; // Just below the header
+            
+            // Get the appropriate pre-rendered token
+            const token = this.tokens[color];
+            if (!token) {
+                console.warn(`Token color ${color} not found`);
+                return;
+            }
+            
+            // Reset token position and make it visible
+            token.style.left = `${startX}px`;
+            token.style.top = `${startY}px`;
+            token.style.opacity = '1';
+            token.style.transform = 'translateY(0)';
+            token.style.transition = 'none'; // Reset any previous transitions
+            
+            // Animate the drop
+            await this.delay(100); // Small delay to show the token
+            
+            // Drop animation
+            token.style.transition = 'transform 0.4s ease-in, opacity 0.3s ease-out';
+            token.style.transform = 'translateY(40px)'; // Drop down 40px
+            
+            // Fade out after drop
+            await this.delay(400);
+            token.style.opacity = '0';
+            
+            // Hide overlay and refresh page after animation
+            await this.delay(300);
+            this.overlay.classList.add('hidden');
+            
+            // Reset token position for next use
+            token.style.left = '-80px';
+            token.style.top = '-80px';
+            token.style.transform = 'translateY(0)';
+            token.style.transition = 'none';
+            
+            window.location.reload();
         }
 
         async placeToken(column) {
@@ -100,7 +150,7 @@
 
         init() {
             this.channel.listen('BroadcastEvent', (data) => {
-                this.handleEvent(data.event, data.playerState);
+                this.handleEvent(data.event, data.gameState, data.playerState);
             });
         }
     }

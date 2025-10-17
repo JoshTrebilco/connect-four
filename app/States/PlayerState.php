@@ -11,4 +11,6 @@ class PlayerState extends State
     public string $name;
 
     public ?string $color = null;
+
+    public ?int $last_placed_column = null;
 }

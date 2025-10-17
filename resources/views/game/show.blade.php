@@ -146,10 +146,6 @@
                 this.soundManager.play('player-joined');
             }
 
-            if (event.startsWith('App\\Events\\Gameplay')) {
-                window.location.reload();
-            }
-
             if (event.startsWith('App\\Events\\Setup')) {
                 window.location.reload();
             }

@@ -40,6 +40,11 @@ class PlacedToken extends Event
         $board->columns[$this->column][] = $this->player_id;
     }
 
+    public function applyToPlayer(PlayerState $player)
+    {
+        $player->last_placed_column = $this->column;
+    }
+
     public function fired()
     {
         $board = BoardState::load($this->board_id);
