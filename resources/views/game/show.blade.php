@@ -44,7 +44,7 @@
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <button id="view-board-btn"
-                        class="inline-flex bg-gradient-to-r from-slate-500 to-slate-600 text-white rounded-lg px-6 py-3 font-semibold transform transition hover:translate-y-[-2px]">
+                        class="hover:cursor-pointer inline-flex bg-gradient-to-r from-slate-500 to-slate-600 text-white rounded-lg px-6 py-3 font-semibold transform transition hover:translate-y-[-2px]">
                         View Board
                     </button>
                     <a href="{{ route('games.index') }}"
@@ -192,14 +192,16 @@
             const modal = document.getElementById('winner-modal');
             modal.classList.remove('hidden');
             
-            // Add celebration animation to the winner token
-            const winnerToken = document.getElementById('winner-token');
-            winnerToken.classList.add('animate-win-celebration');
-            
-            // Remove animation class after completion
-            setTimeout(() => {
-                winnerToken.classList.remove('animate-win-celebration');
-            }, 1500);
+            // Add celebration animation to the visible winner token
+            const visibleToken = document.querySelector('[id^="winner-token-"]:not(.hidden)');
+            if (visibleToken) {
+                visibleToken.classList.add('animate-win-celebration');
+                
+                // Remove animation class after completion
+                setTimeout(() => {
+                    visibleToken.classList.remove('animate-win-celebration');
+                }, 1500);
+            }
         }
 
         hideWinnerModal() {
