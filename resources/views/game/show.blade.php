@@ -68,10 +68,9 @@
 
         loadSounds() {
             const soundFiles = {
-                'token-drop': '/sounds/token-drop.mp3',
-                'win': '/sounds/win.mp3',
+                'placed-token': '/sounds/placed-token.mp3',
+                'winner': '/sounds/winner.mp3',
                 'game-start': '/sounds/game-start.mp3',
-                'player-joined': '/sounds/player-joined.mp3',
             };
 
             Object.entries(soundFiles).forEach(([name, url]) => {
@@ -130,16 +129,12 @@
 
         handleEvent(event, gameState) {
             if (event === 'App\\Events\\Gameplay\\PlayerWonGame' && gameState?.winner_id !== undefined) {
-                this.soundManager.play('win');
+                this.soundManager.play('winner');
                 this.showWinner(gameState.winner_id);
             }
 
             if (event === 'App\\Events\\Gameplay\\PlacedToken') {
-                this.soundManager.play('token-drop');
-            }
-
-            if (event === 'App\\Events\\Setup\\GameStarted') {
-                this.soundManager.play('game-start');
+                this.soundManager.play('placed-token');
             }
 
             if (event === 'App\\Events\\Setup\\PlayerJoinedGame') {
