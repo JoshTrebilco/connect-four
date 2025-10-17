@@ -1,6 +1,6 @@
 @props(['game', 'auth_player_id', 'channel'])
 <div class="space-y-6">
-    @if(! $game->hasPlayer($auth_player_id) && ! $game->isInProgress())
+    @if(! $game->hasPlayer($auth_player_id) && ! $game->isInProgress() && ! $game->ended)
         <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-cyan-200 shadow-xl">
             <div class="flex items-center space-x-3 mb-4">
                 <div class="flex-shrink-0">
@@ -29,7 +29,7 @@
         </div>
     @endif
 
-    @if ($game->hasPlayer($auth_player_id) && !$game->isInProgress())
+    @if ($game->hasPlayer($auth_player_id) && !$game->isInProgress() && !$game->ended) 
         <!-- Share Game Section -->
         <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-teal-200 shadow-xl">
             <div class="flex items-center space-x-3 mb-4">
@@ -107,11 +107,17 @@
                                     </span>
                                 @endif
 
-                                @if ($player->id == $game->activePlayer()?->id)
+                                @if ($player->id == $game->activePlayer()?->id && ! $game->ended)
                                     <svg class="w-4 h-4 text-cyan-500 animate-spin" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
+                                @endif
+
+                                @if ($player->id == $game->winner()?->id)
+                                    <span class="inline-flex items-center rounded-md bg-cyan-400/10 px-2 py-1 text-xs font-medium text-cyan-600 ring-1 ring-inset ring-cyan-400/30">
+                                        Winner
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -121,7 +127,7 @@
         </div>
 
         <!-- Turn Text Section -->
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-teal-200 shadow-xl {{ $game->isInProgress() ? '' : 'hidden' }}">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-teal-200 shadow-xl {{ $game->isInProgress() && ! $game->ended ? '' : 'hidden' }}">
             <div class="flex justify-center">
                 <div class="flex flex-col items-center">
                     <div class="mt-2 text-center text-slate-700 h-6 w-32 flex items-center justify-center" id="turn-text">
