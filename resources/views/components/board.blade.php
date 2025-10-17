@@ -2,7 +2,7 @@
 
 <div class="relative max-w-[600px] mx-auto lg:mx-0 lg:w-[600px] h-[400px] sm:h-[500px] lg:h-[600px] bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-cyan-200 p-3 sm:p-4 lg:p-6 flex-1">
     {{-- Column headers for dropping tokens --}}
-    @if($game->active_player_id == $auth_player_id)
+    @if($game->active_player_id == $auth_player_id && ! $game->ended)
         <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4" id="column-headers">
             @for($i = 0; $i < 7; $i++)
                 <div class="h-4 sm:h-6 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center text-white font-bold text-xs sm:text-sm" 
