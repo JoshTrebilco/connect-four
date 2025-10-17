@@ -15,7 +15,7 @@
     </div>
 
     <!-- Game Board -->
-    <div class="mt-2 lg:mt-5 flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-start">
+    <div class="mt-2 lg:mt-5 flex flex-col gap-6 lg:flex-row lg:items-start">
         <x-board :game="$game" :auth_player_id="$auth_player_id" :channel="$channel" />
         <x-panel :game="$game" :auth_player_id="$auth_player_id" :channel="$channel" />
         

@@ -1,6 +1,6 @@
 @props(['game', 'auth_player_id', 'channel'])
 
-<div class="relative w-full max-w-[600px] mx-auto lg:mx-0 lg:w-[600px] h-[400px] sm:h-[500px] lg:h-[600px] bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-cyan-200 p-3 sm:p-4 lg:p-6 flex-1">
+<div class="relative max-w-[600px] mx-auto lg:mx-0 lg:w-[600px] h-[400px] sm:h-[500px] lg:h-[600px] bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-cyan-200 p-3 sm:p-4 lg:p-6 flex-1">
     {{-- Column headers for dropping tokens --}}
     @if($game->active_player_id == $auth_player_id)
         <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4">
@@ -27,7 +27,7 @@
                      data-row="{{ $i }}" 
                      data-col="{{ $j }}">
                     @if($game->board()->tokenColorAt($j, $i))
-                        <x-token :color="$game->board()->tokenColorAt($j, $i)" :size="32" />
+                        <x-token :color="$game->board()->tokenColorAt($j, $i)" :size="64" />
                     @else
                         <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full bg-cyan-100 shadow-inner"></div>
                     @endif
