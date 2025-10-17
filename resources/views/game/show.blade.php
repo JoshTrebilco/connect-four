@@ -198,8 +198,6 @@
             this.winnerOverlayDismissed = true;
         }
 
-        }
-
         checkInitialWinner() {
             @if($game->winner())
                 this.showWinner('{{ $game->winner()->id }}');
